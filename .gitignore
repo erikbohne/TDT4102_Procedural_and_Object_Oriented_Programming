@@ -1,3 +1,7 @@
+# Course specific files
+subprojects/*
+
+
 # Prerequisites
 *.d
 
