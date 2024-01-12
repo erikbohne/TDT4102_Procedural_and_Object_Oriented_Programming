@@ -1,6 +1,8 @@
 # Course specific files
 subprojects/
 .vscode
+builddir/
+*/meson.build
 
 # Prerequisites
 *.d
