@@ -1,12 +1,13 @@
 #include "std_lib_facilities.h"
 #include "cannonball.h"
+#include "utilities.h"
 
 void testDeviation(double compareOperand, double toOperand, 
                    double maxError, string name);
 
 int main() {
 
-    double maxError = 0.01;
+    //double maxError = 0.01;
 
     // // 1a) test functions from cannonball.h
     // cout << "acclY(): " << acclY() << endl;
@@ -26,20 +27,28 @@ int main() {
     // testDeviation(posX(0, 50, 5.0), 250, maxError, "posX at t=5.0");
     // testDeviation(posY(0, 25, 5.0), 2.375, maxError, "posY at t=5.0");
 
-    // 4d)
-    testDeviation(getVelocityX(27.5, 15.64), 13.8728, maxError, "getVelocityX");
-    testDeviation(getVelocityY(27.5, 15.64), 7.22175, maxError, "getVelocityY");
+    // // 4d)
+    // testDeviation(getVelocityX(27.5, 15.64), 13.8728, maxError, "getVelocityX");
+    // testDeviation(getVelocityY(27.5, 15.64), 7.22175, maxError, "getVelocityY");
 
-    vector<double> velocityVector = getVelocityVector(27.5, 15.64);
-    testDeviation(velocityVector[0], 13.8728, maxError, "getVelocityVector X");
-    testDeviation(velocityVector[1], 7.22175, maxError, "getVelocityVector Y");
+    // vector<double> velocityVector = getVelocityVector(27.5, 15.64);
+    // testDeviation(velocityVector[0], 13.8728, maxError, "getVelocityVector X");
+    // testDeviation(velocityVector[1], 7.22175, maxError, "getVelocityVector Y");
 
-    double velocityX = getVelocityX(27.5, 15.64);
-    double velocityY = getVelocityY(27.5, 15.64);
-    testDeviation(getDistanceTraveled(velocityX, velocityY), 20.4253, maxError, "getDistanceTraveled");
+    // double velocityX = getVelocityX(27.5, 15.64);
+    // double velocityY = getVelocityY(27.5, 15.64);
+    // testDeviation(getDistanceTraveled(velocityX, velocityY), 20.4253, maxError, "getDistanceTraveled");
 
-    double distanceToTarget = 20.4253; // Eksempelavstand
-    testDeviation(targetPractice(distanceToTarget, velocityX, velocityY), 0.0, maxError, "targetPractice");
+    // double distanceToTarget = 20.4253; // Eksempelavstand
+    // testDeviation(targetPractice(distanceToTarget, velocityX, velocityY), 0.0, maxError, "targetPractice");
+
+    // // 5b) test pseudorandom number generator
+    // for(int i = 0; i < 10; i++) {
+    //     cout << randomWithLimits(100, 1000) << endl;
+    // }
+    
+    // 5c)
+    playTargetPractice();
 
     return 0;
 }

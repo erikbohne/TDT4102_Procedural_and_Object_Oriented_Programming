@@ -1,4 +1,5 @@
 #include "cannonball.h"
+#include "utilities.h"
 
 // 2a)
 double acclY() {
@@ -89,4 +90,32 @@ double getDistanceTraveled(double velocityX, double velocityY) {
 double targetPractice(double distanceToTarget, double velocityX, double velocityY) {
     double error = distanceToTarget - getDistanceTraveled(velocityX, velocityY);
     return error;
+}
+
+// 5c)
+void playTargetPractice() {
+    int target = randomWithLimits(100, 1000);
+
+    cout << "Welcome to Cannonball Target Practice!" << endl;
+    cout << "Try to hit a target " << target << " meters away." << endl;
+    cout << "You have 10 shots. Good luck!" << endl;
+
+    for(int i = 0; i < 10; i++) {
+        cout << "\nShot " << i + 1 << ":\n";
+        double userTheta = getUserInputTheta();
+        double userVelocity = getUserInputInitVelocity();
+        vector<double> shot = getVelocityVector(userTheta, userVelocity);
+        double error = targetPractice(target, shot.at(0), shot.at(1));
+
+        cout << "\nShot Result:\n";
+        if(abs(error) < 5.0) {
+            cout << "CONGRATULATIONS! YOU HIT THE TARGET!!!" << endl;
+            break;
+        } else {
+            cout << "Missed! The shot was " << abs(error) << " meters " << (error > 0 ? "short" : "long") << " of the target." << endl;
+            cout << "Travel time of the shot: ";
+            printTime(flightTime(shot.at(1)));
+            cout << "\nTry adjusting your angle or velocity." << endl;
+        }
+    }
 }
