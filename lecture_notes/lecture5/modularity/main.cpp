@@ -9,7 +9,7 @@
 
 // Legg til ny funksjon
 // 1. Definer funkjsonen i .cpp filen
-// 2. #include .h fila i .cpp fila
+// 2. #include .h fila i .cpp filen
 
 int main() {
     string message = "hello, world!";

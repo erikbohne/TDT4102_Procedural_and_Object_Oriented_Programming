@@ -3,6 +3,7 @@ subprojects/
 .vscode
 builddir/
 */meson.build
+*.build
 *.zip
 .DS_Store
 
