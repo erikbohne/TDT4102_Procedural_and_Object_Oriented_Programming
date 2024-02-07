@@ -46,7 +46,7 @@ void MastermindWindow::drawGuessesAndFeedbacks()
 		{
 			// Beregn xPos og yPos for hvert rektangel
             int xPos = padX + i * (padX + padX / 4); // Legg til litt mellomrom mellom hvert rektangel
-            int yPos = 3 * padY + guessIndex * (padY + padY / 4); // Start litt ned fra toppen og legg til mellomrom mellom hver rad
+			int yPos = 3 * padY + guessIndex * (padY + padY / 4); // Start litt ned fra toppen og legg til mellomrom mellom hver rad
 
 			int colorIndex = currentGuess.code[i] - currentGuess.startLetter + 1;
             Color color = colorConverter.at(colorIndex);
@@ -57,22 +57,35 @@ void MastermindWindow::drawGuessesAndFeedbacks()
 	}
 
 	for (int feedbackIndex = 0; feedbackIndex < static_cast<int>(feedbacks.size()); feedbackIndex++) {
-    Feedback feedback = feedbacks[feedbackIndex];
+        Feedback feedback = feedbacks[feedbackIndex];
+        
+        // Startposisjon for tilbakemeldingssirklene til høyre for gjettene
+        int yPos = 3 * padY + feedbackIndex * (padY + padY / 4) + padY / 2; // Midtpunktet i raden for gjettet
+        int xPos = winW - 5 * radCircle * 2;  // Posisjon for den første sirkelen fra høyre side
+        
+        // Tegn sorte sirkler for korrekt posisjon
+        for (int i = 0; i < feedback.correctPosition; i++) {
+            draw_circle({xPos + i * 2 * radCircle, yPos}, radCircle, Color::black);
+        }
 
-    // Startposisjon for tilbakemeldingssirklene til høyre for gjettene
-    int yPos = 3 * padY + feedbackIndex * (padY + padY / 4) + padY / 2; // Midtpunktet i raden for gjettet
-	int xPos = winW - padX - radCircle;  // Start fra høyre side og trekk fra radCircle for å få sentrum av første sirkel
-
-	// Sorte sirkler for korrekt posisjon
-	for (int i = 0; i < feedback.correctPosition; i++) {
-		draw_circle({xPos - i * 2 * radCircle, yPos}, radCircle, Color::black);
-	}
-
-	// Hvite sirkler for korrekte bokstaver uavhengig av posisjon
-	for (int i = 0; i < feedback.correctCharacter; i++) {
-		draw_circle({xPos - (feedback.correctPosition + i) * 2 * radCircle, yPos}, radCircle, Color::white);
-	}
-}
+		// Fyll resten med grå sirkler for å vise for korrekte farger men feil plass
+        for (int i = feedback.correctPosition; i < feedback.correctCharacter; i++) {
+            draw_circle({xPos + i * 2 * radCircle, yPos}, radCircle, Color::gray);
+        }
+        
+		// Tegn hvite sirkler for korrekt farge
+        for (int i = feedback.correctCharacter; i < size; i++) {
+            if (i >= feedback.correctCharacter) {
+                draw_circle({xPos + i * 2 * radCircle, yPos}, radCircle, Color::black);
+                draw_circle({xPos + i * 2 * radCircle, yPos}, radCircle - radCircle/4, Color::white);
+            }
+        }
+        
+        // Fyll resten med grå sirkler for å vise antall ubrukte gjetninger
+        for (int i = feedback.correctCharacter; i < 4; i++) {
+            draw_circle({xPos + i * 2 * radCircle, yPos}, radCircle, Color::light_gray);
+        }
+    }
 }
 
 string MastermindWindow::wait_for_guess()
@@ -141,11 +154,13 @@ void playMastermindVisual() {
 
 	// Opprett grafikkvinduet
     MastermindWindow mwin{900, 20, winW, winH, size, "Mastermind"};
-	mwin.setCodeHidden(false);
+	mwin.setCodeHidden(true);
 
     // Generer den hemmelige koden
     string code = randomizeString(size, 'A', 'A' + letters - 1);
     int attempts = 0;
+
+	addGuess(mwin, code, 'A');
 
 	// Spill-løkke
     while (attempts < maxAttempts) {
@@ -162,17 +177,13 @@ void playMastermindVisual() {
 
         // Sjekk for seier
         if (correctCharsAndPos == size) {
-            //mwin.displayMessage("Gratulerer, du gjettet riktig kode!");
             break;
         }
 
         attempts++;
     }
 
-    // if (attempts == maxAttempts) {
-        
-    // }
-
-    // Vent på at brukeren lukker vinduet
-    mwin.wait_for_close();
+    mwin.drawGuessesAndFeedbacks();
+	mwin.setCodeHidden(false);
+	mwin.wait_for_close();
 }
