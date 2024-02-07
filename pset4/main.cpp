@@ -1,6 +1,7 @@
 #include "std_lib_facilities.h"
 #include "tests.h"
 #include "mastermind.h"
+#include "masterVisual.h"
 
 int main() {
 
@@ -14,6 +15,7 @@ int main() {
     cout << "7) testReadInputToString()" << endl;
     cout << "8) testCountChar()" << endl;
     cout << "9) Play Mastermind" << endl;
+    cout << "10) Play Visual Mastermind" << endl;
     cout << "Hvilken funkjson vil du teste? ";
     int num;
     cin >> num;
@@ -48,6 +50,9 @@ int main() {
             break;
         case 9:
             playMastermind();
+            break;
+        case 10:
+            playMastermindVisual();
             break;
         default:
             cout << "Ugyldig input" << endl;
