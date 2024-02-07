@@ -20,3 +20,7 @@ bool isInProgram(const Student& student, const string& program);
 string randomizeString(int n, char minS, char maxS);
 string readInputToString(int n, char minS, char maxS);
 int countChar(const string& str, char c);
+
+// Oppgave 4
+int checkCharactersAndPosition(const string& code, const string& guess);
+int checkCharacters(const string& code, const string& guess, const int& letters);

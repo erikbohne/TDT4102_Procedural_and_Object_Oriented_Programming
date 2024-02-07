@@ -43,8 +43,22 @@ void testStudentStruct() {
 
 // Oppgave 3
 void testString() {
-    string grades = randomizeString(8, 'A', 'F');
-    cout << grades << endl;
+    string grades = randomizeString(150, 'A', 'F');
+    vector<int> gradeCount(6, 0); // A-F
+    for (char grade : grades) {
+        if (grade >= 'A' && grade <= 'F') {
+            gradeCount[grade - 'A']++;
+        }
+    }
+
+    int total = 0, count = 0;
+    for (size_t i = 0; i < gradeCount.size(); ++i) {
+        total += (6 - i) * gradeCount[i]; // A=6, B=5, ..., F=1
+        count += gradeCount[i];
+    }
+
+    double average = count > 0 ? static_cast<double>(total) / count : 0;
+    cout << "Average grade: " << average << endl;
 }
 
 void testRandomizeString() {

@@ -45,8 +45,6 @@ string randomizeString(int n, char minS, char maxS) {
     default_random_engine generator(rd());
     uniform_int_distribution<int> distribution(min, max);
 
-    cout << "random generator" << endl;
-
     string result = "";
     for (int i = 0; i < n; i++) {
         result += static_cast<char>(distribution(generator));
@@ -82,4 +80,38 @@ int countChar(const string& str, char c) {
         }
     }
     return count;
+}
+
+// Oppgave 4
+int checkCharactersAndPosition(const string& code, const string& guess) {
+
+    int correct = 0;
+    for (size_t i = 0; i < code.length(); ++i) {
+        if (code[i] == guess[i]) { // Sjekk om bokstaven er korrekt og på riktig posisjon
+            ++correct;
+        }
+    }
+
+    return correct;
+}
+
+int checkCharacters(const string& code, const string& guess, const int& letters) {
+    int totalCorrect = 0;
+
+    const char minChar = 'A';
+    const char maxChar = 'A' + letters - 1;
+
+    for (char ch = minChar; ch <= maxChar; ++ch) {
+        int countInCode = countChar(code, ch);
+        int countInGuess = countChar(guess, ch);
+
+        // Manuell sammenligning uten std::min
+        if (countInCode < countInGuess) {
+            totalCorrect += countInCode;
+        } else {
+            totalCorrect += countInGuess;
+        }
+    }
+
+    return totalCorrect;
 }
