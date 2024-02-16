@@ -28,3 +28,37 @@ string rankToString(Rank rank) {
         default: return "Unknown Rank";
     }
 }
+
+CardDeck::CardDeck() {
+    for (int suit = static_cast<int>(Suit::CLUBS); suit <= static_cast<int>(Suit::SPADES); ++suit) {
+        for (int rank = static_cast<int>(Rank::TWO); rank <= static_cast<int>(Rank::ACE); ++rank) {
+            cards.emplace_back(static_cast<Suit>(suit), static_cast<Rank>(rank));
+        }
+    }
+}
+
+void CardDeck::swap(int index1, int index2) {
+    std::swap(cards[index1], cards[index2]);
+}
+
+void CardDeck::print() const {
+    for (const auto& card : cards) {
+        cout << card.toString() << endl;
+    }
+}
+
+void CardDeck::shuffle() {
+    auto rng = std::default_random_engine {};
+    rng.seed(std::chrono::system_clock::now().time_since_epoch().count());
+    std::shuffle(cards.begin(), cards.end(), rng);
+}
+
+Card CardDeck::drawCard() {
+    if (cards.empty()) {
+        throw std::out_of_range("Cannot draw from an empty deck.");
+    }
+
+    Card drawnCard = cards.back();
+    cards.pop_back();
+    return drawnCard;
+}
