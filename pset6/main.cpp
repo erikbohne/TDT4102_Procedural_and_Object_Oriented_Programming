@@ -1,6 +1,7 @@
 #include "writeToFile.h"
 #include "debugging.h"
 #include "courseCatalog.h"
+#include "bouncingBall.h"
 
 int main() {
     // Task 1: File writing
@@ -29,6 +30,9 @@ int main() {
     CourseCatalog catalog2;
     catalog2.loadCatalog("courseCatalog.csv");
     cout << endl << "Catalog 2: " << endl << catalog2;
+
+    // Task 4: Bouncing ball
+    bouncingBall();
 
     return 0;
 }
