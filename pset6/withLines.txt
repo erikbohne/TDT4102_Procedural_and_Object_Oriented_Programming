@@ -1,0 +1,8 @@
+1: hei
+2: på
+3: deg
+4: din
+5: gamle
+6: sjokko
+7: sei
+8: quit
