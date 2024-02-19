@@ -1,0 +1,4 @@
+Ved bruk av operatoren [] for å sette en verdi i et map, vil den sette verdien på nøkkelen dersom den finnes, og ellers legge til en ny nøkkel med den gitte verdien.
+Derfor vil den overskrive verdien dersom nøkkelen allerede finnes, og ellers legge til en ny nøkkel med den gitte verdien.
+
+.insert() vil bare legge til dersom nøkkelen ikke allerede finnes fra før. Dersom nøkkelen allerede finnes, vil den ikke gjøre noe.
