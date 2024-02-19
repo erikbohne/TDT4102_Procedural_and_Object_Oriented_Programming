@@ -6,7 +6,12 @@ constexpr Point BOUNCE_WINDOW_TOP_LEFT{50, 50};
 constexpr int BOUNCE_WINDOW_WIDTH{800}; 
 constexpr int BOUNCE_WINDOW_HEIGHT{500};
 
-
+std::map<int, Color> color_map = {
+    {1, Color::red},
+    {2, Color::green},
+    {3, Color::blue},
+    {4, Color::yellow}
+};
 
 void bouncingBall() {
     AnimationWindow window{BOUNCE_WINDOW_TOP_LEFT.x, BOUNCE_WINDOW_TOP_LEFT.y, 
@@ -32,8 +37,9 @@ void bouncingBall() {
     is >> slow >> fast;
 
     // initialise the run
-    BouncingBallConfig config = slow;
-    bool movingUp = true;
+    velocity = slow.velocity;
+    colour_up = color_map.at(slow.color_up);
+    colour_down = color_map.at(slow.color_down);
 
     while (!window.should_close()) {
         // determine increments based on the velocity
@@ -50,6 +56,15 @@ void bouncingBall() {
             if (count_num_passes % 5 == 0) {
                 // change configuration
                 // update both velcity and colors
+                if (velocity == slow.velocity) {
+                    velocity = fast.velocity;
+                    colour_up = color_map.at(fast.color_up);
+                    colour_down = color_map.at(fast.color_down);
+                } else {
+                    velocity = slow.velocity;
+                    colour_up = color_map.at(slow.color_up);
+                    colour_down = color_map.at(slow.color_down);
+                }
     
             }
         } else {
@@ -58,16 +73,20 @@ void bouncingBall() {
         }
 
         // movement i y-direction
-        if (((count_bounce_top + count_bounce_bottom) % 2) == 0) {
-            // move upwards
-
-            
-        } else {
-            // move downward
-
-
+        if ((y - radius) < 0) {
+            // reached top - bounce back
+            count_bounce_top++;
+            alpha = -alpha;
+        } else if ((y + increment_y) > BOUNCE_WINDOW_HEIGHT) {
+            // reached bottom - bounce back
+            count_bounce_bottom++;
+            alpha = -alpha;
         }
-    
+        // move upwards
+        y += increment_y;
+
+        cout << "x: " << x << " y: " << y << "alpha: " << alpha << endl;
+        window.draw_circle({x, y}, radius, colour_down);
         window.next_frame();
     }
 }
