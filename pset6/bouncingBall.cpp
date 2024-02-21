@@ -37,9 +37,9 @@ void bouncingBall() {
     is >> slow >> fast;
 
     // initialise the run
-    velocity = slow.velocity;
-    colour_up = color_map.at(slow.color_up);
-    colour_down = color_map.at(slow.color_down);
+    velocity = fast.velocity;
+    colour_up = color_map.at(fast.color_up);
+    colour_down = color_map.at(fast.color_down);
 
     while (!window.should_close()) {
         // determine increments based on the velocity
@@ -73,7 +73,7 @@ void bouncingBall() {
         }
 
         // movement i y-direction
-        if ((y - radius) < 0) {
+        if ((y + increment_y) < 0) {
             // reached top - bounce back
             count_bounce_top++;
             alpha = -alpha;
@@ -85,7 +85,6 @@ void bouncingBall() {
         // move upwards
         y += increment_y;
 
-        cout << "x: " << x << " y: " << y << "alpha: " << alpha << endl;
         window.draw_circle({x, y}, radius, colour_down);
         window.next_frame();
     }
