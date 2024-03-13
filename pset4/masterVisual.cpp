@@ -60,7 +60,7 @@ void MastermindWindow::drawGuessesAndFeedbacks()
         Feedback feedback = feedbacks[feedbackIndex];
         
         // Startposisjon for tilbakemeldingssirklene til høyre for gjettene
-        int yPos = 3 * padY + feedbackIndex * (padY + padY / 4) + padY / 2; // Midtpunktet i raden for gjettet
+        int yPos = 4 * padY + feedbackIndex * (padY + padY / 4) + padY / 2; // Midtpunktet i raden for gjettet
         int xPos = winW - 5 * radCircle * 2;  // Posisjon for den første sirkelen fra høyre side
         
         // Tegn sorte sirkler for korrekt posisjon
