@@ -1,5 +1,6 @@
 #include "functions.h"
 #include "Matrix.h"
+#include "dummy.h"
 
 int main() {
     // Task 1
@@ -10,6 +11,7 @@ int main() {
     std::cout << I;
 
     // Task 3
-    
+    dummyTest();
+
     return 0;
 }
