@@ -1,1 +1,7 @@
-1: quit
+1: hei
+2: hei
+3: på
+4: deg
+5: din
+6: gamel
+7: quit
