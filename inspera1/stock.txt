@@ -1,0 +1,16 @@
+Burger, 20
+Lasagna, 16
+Chicken, 32
+Porkchops, 21
+Beef, 7
+Soup, 58
+Cinnamon bun, 100
+Baguette, 54
+Salad, 100
+Fries, 200
+Rice, 10
+Mashed potatoes, 30
+Pasta, 50
+Caviar, 10
+Couscous, 36
+Root vegetables, 21
