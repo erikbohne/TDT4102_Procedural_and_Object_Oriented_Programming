@@ -58,3 +58,38 @@ std::ostream& operator<<(std::ostream& os, const Matrix& m) {
     }
     return os;
 }
+
+Matrix::Matrix(const Matrix & rhs) : rows(rhs.rows), columns(rhs.columns) {
+    matrix = new double[rows*columns];
+    identityMatrix = new double[rows*rows];
+
+    for (int i = 0; i < rows * columns; i++) {
+        matrix[i] = rhs.matrix[i];
+    }
+
+    for (int i = 0; i < rows * rows; i++) {
+        identityMatrix[i] = rhs.identityMatrix[i];
+    }
+}
+
+Matrix& Matrix::operator=(const Matrix& rhs) {
+    if (this != &rhs) {
+        delete[] matrix;
+        delete[] identityMatrix;
+
+        rows = rhs.rows;
+        columns = rhs.columns;
+
+        matrix = new double[rows*columns];
+        identityMatrix = new double[rows*rows];
+
+        for (int i = 0; i < rows * columns; i++) {
+            
+        }
+
+        for (int i = 0; i < rows * rows; i++) {
+            identityMatrix[i] = rhs.identityMatrix[i];
+        }
+    }
+    return *this;
+}

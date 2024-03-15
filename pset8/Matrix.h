@@ -22,4 +22,8 @@ public:
     int getColumns() const;
 
     friend std::ostream& operator<<(std::ostream& os, const Matrix& m);
+
+    Matrix(const Matrix & rhs);
+
+    Matrix& operator=(const Matrix& rhs);
 };
