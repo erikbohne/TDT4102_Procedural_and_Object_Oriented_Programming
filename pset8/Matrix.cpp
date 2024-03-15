@@ -1,40 +1,23 @@
 #include "Matrix.h"
 
 Matrix::Matrix(int nRows, int nColumns) : rows(nRows), columns(nColumns) {
-    assert(rows >= 0);
-    assert(columns >= 0);
+    assert(rows > 0 && columns > 0);
     matrix = new double[rows*columns];
-    identityMatrix = nullptr;
+    std::fill_n(matrix, rows * columns, 0.0);
 }
 
 Matrix::Matrix(int nRows) : rows(nRows), columns(nRows) {
-    assert(rows >= 0);
-    identityMatrix = new double[rows*rows];
     for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < rows; ++j) {
-            identityMatrix[i * rows + j] = (i == j) ? 1.0 : 0.0;
-        }
+        this->set(i, i, 1.0);
     }
-    matrix = nullptr;
 }
 
 Matrix::~Matrix() {
-    if (matrix != nullptr) {
-        delete[] matrix;
-    }
-    if (identityMatrix != nullptr) {
-        delete[] identityMatrix;
-    }
+    delete[] matrix;
 }
 
 double Matrix::get(int row, int col) const {
-    if (matrix != nullptr) {
-        return matrix[row * columns + col];
-    }
-    if (identityMatrix != nullptr) {
-        return identityMatrix[row * columns + col];
-    }
-    return NULL;
+    return matrix[row*columns+col];
 }
 
 void Matrix::set(int row, int col, double value) {
@@ -61,35 +44,36 @@ std::ostream& operator<<(std::ostream& os, const Matrix& m) {
 
 Matrix::Matrix(const Matrix & rhs) : rows(rhs.rows), columns(rhs.columns) {
     matrix = new double[rows*columns];
-    identityMatrix = new double[rows*rows];
-
     for (int i = 0; i < rows * columns; i++) {
         matrix[i] = rhs.matrix[i];
-    }
-
-    for (int i = 0; i < rows * rows; i++) {
-        identityMatrix[i] = rhs.identityMatrix[i];
     }
 }
 
 Matrix& Matrix::operator=(const Matrix& rhs) {
     if (this != &rhs) {
         delete[] matrix;
-        delete[] identityMatrix;
-
         rows = rhs.rows;
         columns = rhs.columns;
-
         matrix = new double[rows*columns];
-        identityMatrix = new double[rows*rows];
-
         for (int i = 0; i < rows * columns; i++) {
-            
-        }
-
-        for (int i = 0; i < rows * rows; i++) {
-            identityMatrix[i] = rhs.identityMatrix[i];
+            matrix[i] = rhs.matrix[i];
         }
     }
     return *this;
+}
+
+Matrix& Matrix::operator+=(const Matrix& rhs) {
+    if (rows != rhs.rows || columns != rhs.columns) {
+        return *this;
+    }
+    for (int i = 0; i < rows * columns; i++) {
+        matrix[i] = matrix[i] + rhs.matrix[i];
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator+(const Matrix& rhs) const {
+    Matrix sum = *this; // kaller kopikonstruktøren automatisk
+    sum += rhs;
+    return sum;
 }

@@ -8,7 +8,6 @@ private:
     int rows;
     int columns;
     double* matrix;
-    double* identityMatrix;
 
 public:
     Matrix(int nRows, int nColumns);
@@ -26,4 +25,6 @@ public:
     Matrix(const Matrix & rhs);
 
     Matrix& operator=(const Matrix& rhs);
+    Matrix& operator+=(const Matrix& rhs);
+    Matrix& operator+(const Matrix& rhs) const;
 };
