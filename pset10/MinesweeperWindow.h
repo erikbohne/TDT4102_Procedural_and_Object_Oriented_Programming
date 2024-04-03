@@ -41,5 +41,8 @@ private:
 
 	// callback funksjoner til Tile knappene
 	void cb_click();
-	
+
+	// Spill-logikk
+	void game_over();
+	void is_game_won();
 };

@@ -1,4 +1,5 @@
 #include "MinesweeperWindow.h"
+#include "random"
 #include <iostream>
 
 MinesweeperWindow::MinesweeperWindow(int x, int y, int width, int height, int mines, const string &title) : 
@@ -16,9 +17,13 @@ MinesweeperWindow::MinesweeperWindow(int x, int y, int width, int height, int mi
 		}
 	}
 	// Legg til miner paa tilfeldige posisjoner
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> disX(0, width - 1);
+	std::uniform_int_distribution<> disY(0, height - 1);
 	for (int i = 0; i < mines; ++i) {
-		int x = rand() % width;
-		int y = rand() % height;
+		int x = disX(gen);
+		int y = disY(gen);
 		at(Point{x * cellSize, y * cellSize})->setMine();
 	}
 }
@@ -57,7 +62,7 @@ void MinesweeperWindow::openTile(Point xy) {
 	}
 	tile.get()->open();
 	if (tile.get()->getMine()) {
-		cout << "Game over!" << endl;
+		game_over();
 	} else {
 		vector<Point> adj = adjacentPoints(xy);
 		int mines = countMines(adj);
@@ -68,7 +73,7 @@ void MinesweeperWindow::openTile(Point xy) {
 			}
 		}
 	}
-
+	is_game_won();
 }
 
 void MinesweeperWindow::flagTile(Point xy) {
@@ -93,4 +98,31 @@ void MinesweeperWindow::cb_click() {
 	else if(this->is_right_mouse_button_down()){
 		flagTile(xy);
 	}
+}
+
+
+void MinesweeperWindow::game_over() {
+	for (shared_ptr<Tile> tile : tiles) {
+		if (tile->getMine()) {
+			tile->open();
+		}
+	}
+
+	std::cout << "Game Over" << std::endl;
+}
+
+void MinesweeperWindow::is_game_won() {
+	for (shared_ptr<Tile> tile : tiles) {
+		if (tile->getState() == Cell::closed && !tile->getMine()) {
+			return;
+		}
+	}
+
+	for (shared_ptr<Tile> tile : tiles) {
+		if (tile->getMine()) {
+			tile->flag();
+		}
+	}
+
+	std::cout << "Game Won" << std::endl;
 }
