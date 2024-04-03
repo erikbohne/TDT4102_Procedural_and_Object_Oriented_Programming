@@ -29,4 +29,12 @@ public:
 	void flag();
 
 	Cell getState() const { return state; };
+
+	bool getMine();
+	void setMine();
+
+	void setAdjMines(int n);
+
+private:
+	bool isMine = false;
 };
