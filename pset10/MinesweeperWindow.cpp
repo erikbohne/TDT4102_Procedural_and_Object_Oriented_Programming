@@ -16,6 +16,11 @@ MinesweeperWindow::MinesweeperWindow(int x, int y, int width, int height, int mi
 		}
 	}
 	// Legg til miner paa tilfeldige posisjoner
+	for (int i = 0; i < mines; ++i) {
+		int x = rand() % width;
+		int y = rand() % height;
+		at(Point{x * cellSize, y * cellSize})->setMine();
+	}
 }
 
 vector<Point> MinesweeperWindow::adjacentPoints(Point xy) const {
@@ -35,10 +40,43 @@ vector<Point> MinesweeperWindow::adjacentPoints(Point xy) const {
 	return points;
 }
 
+int MinesweeperWindow::countMines(vector<Point> coords) const {
+	int count = 0;
+	for (Point p : coords) {
+		if (at(p)->getMine()) {
+			++count;
+		}
+	}
+	return count;
+}
+
 void MinesweeperWindow::openTile(Point xy) {
+	shared_ptr<Tile>& tile = at(xy);
+	if (tile.get()->getState() != Cell::closed) {
+		return;
+	}
+	tile.get()->open();
+	if (tile.get()->getMine()) {
+		cout << "Game over!" << endl;
+	} else {
+		vector<Point> adj = adjacentPoints(xy);
+		int mines = countMines(adj);
+		tile.get()->setAdjMines(mines);
+		if (mines == 0) {
+			for (Point p : adj) {
+				openTile(p);
+			}
+		}
+	}
+
 }
 
 void MinesweeperWindow::flagTile(Point xy) {
+	shared_ptr<Tile>& tile = at(xy);
+	if (tile.get()->getState() == Cell::open) {
+		return;
+	}
+	tile.get()->flag();
 }
 
 //Kaller openTile ved venstreklikk og flagTile ved hoyreklikk

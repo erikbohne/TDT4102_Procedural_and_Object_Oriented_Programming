@@ -19,6 +19,8 @@ void Tile::open()
 		return;
 	}
 	this->state = Cell::open;
+	set_label(cellToSymbol.at(Cell::open));
+	this->setButtonColor(TDT4102::Color::white);
 	if (this->isMine) {
 		set_label("X");
 		set_label_color(TDT4102::Color::red);
@@ -33,6 +35,7 @@ void Tile::flag()
 	} else {
 		this->state = Cell::flagged;
 		set_label(cellToSymbol.at(Cell::flagged));
+		set_label_color(TDT4102::Color::red);
 	}
 }
 
