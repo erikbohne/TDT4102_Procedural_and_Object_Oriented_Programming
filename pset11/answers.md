@@ -39,3 +39,90 @@ If we use the resize function, the vector will be resized to 20 elements. If the
 
 resize : 0.035726 seconds
 reserve: 0.013925 seconds
+
+# Task 3
+
+> a) Ta tiden på hele programmet før optimalisering.
+
+Time taken: 8.13712 seconds
+
+> b) Ta tiden etter optimalisering. Noter endringer.
+
+First change was removing the for loop that set the column values to 0.0 to this
+
+```cpp
+column.resize(matrixSize, 0.0);
+```
+
+New time taken: 5.23663 seconds
+
+Next change is going from this:
+
+```cpp
+double sumMatrix(std::vector<std::vector<double>> matrix){
+    double sum;
+    for (int col = 0; col < matrix.size(); col++){
+        for (int row = 0; row < matrix.size(); row++){
+            double value = matrix.at(row).at(col);
+            sum += value;            
+        }
+    }
+    return sum;
+}
+```
+
+to this:
+
+```cpp
+double sumMatrix(const std::vector<std::vector<double>>& matrix) {
+    double sum = 0.0;
+    for (const auto& row : matrix) {
+        for (double value : row) {
+            sum += value;
+        }
+    }
+    return sum;
+}
+```
+
+Changing the for loop to use a range-based for loop and using a reference to the matrix instead of copying it.
+
+New time taken: 2.66229 seconds
+
+
+Last change will be from this:
+
+```cpp
+void setDiagonalValue(std::vector<std::vector<double>>& matrix, double newValue){
+    for (int row = 0; row < matrix.size(); row++){
+        for (int col = 0; col < matrix.size(); col++){
+            bool isDiagonal = (row == col);
+            if (isDiagonal){
+                matrix.at(row).at(col) = newValue;
+            }
+        }
+    }
+}
+```
+
+to this:
+
+```cpp
+void setDiagonalValue(std::vector<std::vector<double>>& matrix, double newValue) {
+    for (int i = 0; i < minDimension; ++i) {
+        matrix[i][i] = newValue;
+    }
+}
+```
+
+This will only iterate over the diagonal elements of the matrix. We also use direct access instead of .at().
+
+New time taken: 2.48834 seconds
+
+
+
+> c) Skru på kompilatoroptimalisering. Hva skjer med tiden?
+
+SUPER SPEEEEEEEEEEED SUPER FAAAAAAST
+
+Time taken: 0.250721 seconds

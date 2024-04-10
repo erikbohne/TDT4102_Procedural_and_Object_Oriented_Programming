@@ -1,9 +1,11 @@
 #include "Stopwatch.h"
+#include "optimizationTask.h"
 #include <array>
 #include <vector>
 
 void timeTask1();
 void timeTask2();
+void timeTask3();
 
 constexpr int size = 10000;
 constexpr int N = 1000000000;
@@ -11,10 +13,13 @@ constexpr int N = 1000000000;
 int main() {
     
     // Task 1
-    timeTask1();
+    // timeTask1();
 
     // Task 2
-    timeTask2();
+    // timeTask2();
+
+    // Task 3
+    timeTask3();
 
     return 0;
 }
@@ -42,6 +47,7 @@ void timeTask1 () {
 }
 
 void timeTask2 () {
+
     Stopwatch stopwatch;
     stopwatch.start();
 
@@ -81,6 +87,21 @@ void timeTask2 () {
     for (int i = 0; i < 1000000; ++i) {
         vec.push_back(i);
     }
+
+    // ----- END OF CODE TO TIME ----- //
+
+    double time = stopwatch.stop();
+    std::cout << "Time taken: " << time << " seconds" << std::endl;
+}
+
+void timeTask3 () {
+    Stopwatch stopwatch;
+    stopwatch.start();
+
+    // ----- START OF CODE TO TIME ----- //
+
+    // Task 3
+    optimizationTask();
 
     // ----- END OF CODE TO TIME ----- //
 

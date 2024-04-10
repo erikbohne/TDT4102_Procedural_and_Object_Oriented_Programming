@@ -4,23 +4,19 @@
 
 // Utdelt kode til oppgave 3
 
-void setDiagonalValue(std::vector<std::vector<double>>& matrix, double newValue){
-    for (int row = 0; row < matrix.size(); row++){
-        for (int col = 0; col < matrix.size(); col++){
-            bool isDiagonal = (row == col);
-            if (isDiagonal){
-                matrix.at(row).at(col) = newValue;
-            }
-        }
+void setDiagonalValue(std::vector<std::vector<double>>& matrix, double newValue) {
+    int minDimension = std::min(matrix.size(), matrix.empty() ? 0 : matrix[0].size());
+    for (int i = 0; i < minDimension; ++i) {
+        matrix[i][i] = newValue;
     }
 }
 
-double sumMatrix(std::vector<std::vector<double>> matrix){
-    double sum;
-    for (int col = 0; col < matrix.size(); col++){
-        for (int row = 0; row < matrix.size(); row++){
-            double value = matrix.at(row).at(col);
-            sum += value;            
+
+double sumMatrix(const std::vector<std::vector<double>>& matrix) {
+    double sum = 0.0;
+    for (const auto& row : matrix) {
+        for (double value : row) {
+            sum += value;
         }
     }
     return sum;
@@ -35,9 +31,7 @@ void optimizationTask() {
     
     for (int i = 0; i < matrixSize; i++){
         std::vector<double> column;
-        for (int j = 0; j < matrixSize; j++){
-            column.push_back(0.0);
-        }
+        column.resize(matrixSize, 0.0);
         matrix.push_back(column);
     }
 
