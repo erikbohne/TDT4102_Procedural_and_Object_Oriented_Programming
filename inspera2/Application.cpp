@@ -71,9 +71,15 @@ void Application::run()
 void Application::loadAndApplyConfiguration(filesystem::path filepath)
 {
 // BEGIN: T5
-    ;
-
-    sim.applyConfiguration(20, 1);
+    ifstream file(filepath);
+    if (!file.is_open()) {
+        cout << "Error: Could not open file " << filepath << endl;
+        return;
+    }
+    // First line is doves and second is hawks
+    int doves, hawks;
+    file >> doves >> hawks;
+    sim.applyConfiguration(doves, hawks);
 // END: T5
 }
 

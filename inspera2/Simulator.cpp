@@ -88,24 +88,26 @@ void Bird::update()
 
 // Task T8: Orient the birds so that they are facing
 // in the direction they are headed.
+
 void Bird::draw(AnimationWindow &window) const
 {
 // BEGIN: T8
-    const float PI = 3.14159265;
+    const double PI = 3.14159265;
 
-    float direction;
-    if (velocity.x > 0) {
-       direction = atan(velocity.x / velocity.y);
-    } else if (velocity.x < 0)
-    {
-        direction = atan(velocity.x / velocity.y) + PI;
-    } else {
-        direction = (PI/2);
-    }
+    double direction = atan2(velocity.y, velocity.x);
 
-    FloatingPoint p1 = {position.x + cos(direction) * size, position.y + sin(direction) * size};
-    FloatingPoint p2 = {position.x + cos(direction + (2*PI/3)) * size, position.y + sin(direction + (2*PI/3)) * size};
-    FloatingPoint p3 = {position.x + cos(direction - (2*PI/3)) * size, position.y + sin(direction - (2*PI/3)) * size};
+    FloatingPoint p1 = {
+        position.x + cos(direction) * size, 
+        position.y + sin(direction) * size
+    };
+    FloatingPoint p2 = {
+        position.x + cos(direction + (2*PI/3)) * size, 
+        position.y + sin(direction + (2*PI/3)) * size
+    };
+    FloatingPoint p3 = {
+        position.x + cos(direction - (2*PI/3)) * size, 
+        position.y + sin(direction - (2*PI/3)) * size
+    };
     
     window.draw_triangle(
         {static_cast<int> (p1.x), static_cast<int> (p1.y)},
@@ -135,21 +137,20 @@ float distance(FloatingPoint a, FloatingPoint b);
 
 void Dove::makeFriendsAndFoes(vector<shared_ptr<Bird>> &birds)
 {
-    if (birds.size() > 0){
-        bool isDove = isInstanceOf<Dove>(birds.at(0).get());
-    }
+    friends.clear(); 
+    foes.clear();   
 
-    float curr_distance;
-    for (int i = 0; i < birds.size(); i++) {
-        curr_distance = distance(this->getPosition(), birds.at(i).get()->getPosition());
-        if (curr_distance == 0) {
-            continue;
-        }
-        if (curr_distance < AVOID_RADIUS && isInstanceOf<Hawk>(birds.at(i).get())) {
-            foes.emplace_back(birds.at(i).get());
-        }
-        if (curr_distance < FRIEND_RADIUS && isInstanceOf<Dove>(birds.at(i).get())) {
-            friends.emplace_back(birds.at(i).get());
+    for (auto &other : birds) {
+        if (other.get() != this) {
+            if (isInstanceOf<Dove>(other.get())) {
+                if (distance(position, other->getPosition()) < FRIEND_RADIUS) {
+                    friends.push_back(other);
+                }
+            } else {
+                if (distance(position, other->getPosition()) < AVOID_RADIUS) {
+                    foes.push_back(other);
+                }
+            }
         }
     }
 }
@@ -166,24 +167,19 @@ float distance(FloatingPoint a, FloatingPoint b)
 void Dove::updateVelocity()
 {
 // BEGIN: T7
-    FloatingPoint updated_velocity;
+    FloatingPoint updated_velocity = calculateCohesion() +
+                                     calculateAlignment() +
+                                     calculateSeparation() +
+                                     calculateAvoidance();
 
-    updated_velocity = calculateCohesion();
-    updated_velocity = updated_velocity + calculateAlignment();
-    updated_velocity = updated_velocity + calculateAvoidance();
-    updated_velocity = updated_velocity + calculateSeparation();
+    double current_magnitude = magnitude(updated_velocity);
 
-    if (updated_velocity.x < MAX_SPEED) {
-        velocity.x = updated_velocity.x;
-    } else {
-        velocity.x = MAX_SPEED;
+    if (current_magnitude > MAX_SPEED) {
+        updated_velocity.x *= MAX_SPEED / current_magnitude;
+        updated_velocity.y *= MAX_SPEED / current_magnitude;
     }
 
-    if (updated_velocity.x < MAX_SPEED) {
-        velocity.y = updated_velocity.y;
-    } else {
-        velocity.y = MAX_SPEED;
-    }
+    velocity = updated_velocity;
 
 // END: T7
 }
@@ -399,14 +395,30 @@ void getFlock(shared_ptr<Dove> dove, vector<shared_ptr<Dove>> &flock)
 
 void Simulator::colorBirds()
 {
-    vector<shared_ptr<Dove>> doves = getDoves(birds);
+    auto doves = getDoves(birds);
     for (auto &dove : doves) {
-        getFlock(dove, doves);
-    }
-
-    // Ville heller klat hver flokk og satt fargen på fuglene i flokken
-    for (auto &dove : doves) {
-        dove->setColor(TDT4102::Color::aqua);
+        vector<shared_ptr<Dove>> flock;
+        getFlock(dove, flock);
+        // One solution is to paint the doves
+        // the average color value of the flock
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        int flockCount = static_cast<int> (flock.size());
+        for (auto &dove : flock) {
+            r += static_cast<int> (dove->getOriginalColor().redChannel);
+            g += static_cast<int> (dove->getOriginalColor().greenChannel);
+            b += static_cast<int> (dove->getOriginalColor().blueChannel);
+        }
+        // A flock will always contain yourself from getFlock
+        r = r / flockCount;
+        g = g / flockCount;
+        b = b / flockCount;
+        unsigned char newR = static_cast<unsigned char> (r);
+        unsigned char newG = static_cast<unsigned char> (g);
+        unsigned char newB = static_cast<unsigned char> (b);
+        Color newColor {newR, newG, newB};
+        dove->setColor(newColor);
     }
 }
 // END: T9
@@ -414,9 +426,31 @@ void Simulator::colorBirds()
 // Task T10: Implement functionallity to add birds during the simulation.
 void Simulator::addBird()
 {
-// BEGIN: T10
-    ;
-// END: T10
+    // BEGIN: T10
+    if (window.is_left_mouse_button_down() && window.is_key_down(KeyboardKey::D)) {
+        doveSpawnKeysPressed = true;
+    } else if (!(window.is_left_mouse_button_down())
+               && window.is_key_down(KeyboardKey::D)
+               && doveSpawnKeysPressed) {
+        Point mouseCoordinates = window.get_mouse_coordinates();
+        FloatingPoint position {double(mouseCoordinates.x),
+                                double(mouseCoordinates.y)};
+        // Give new doves a random start velocity and color.
+        FloatingPoint velocity {
+            static_cast<double>(randomInt(SIM_RAND_MIN, SIM_RAND_MAX))
+            / static_cast<double>(SIM_RAND_MAX),
+            static_cast<double>(randomInt(SIM_RAND_MIN, SIM_RAND_MAX))
+            / static_cast<double>(SIM_RAND_MAX)
+        };
+        Color color {
+            static_cast<unsigned char> (randomInt(0, 255)),
+            static_cast<unsigned char> (randomInt(0, 255)),
+            static_cast<unsigned char> (randomInt(0, 255))
+        };
+        createDove(position, velocity, color);
+        doveSpawnKeysPressed = false;
+    }
+    // END: T10
 }
 
 // Motivates birds to stay on screen. 
