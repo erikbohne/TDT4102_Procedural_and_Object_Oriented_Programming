@@ -1,0 +1,30 @@
+make_grid 5 5
+make_robot bob 2 2 blue
+make_robot alice 2 3 blue
+recolor_robot alice green
+recolor_robot alice blue
+recolor_robot alice red
+recolor_robot alice yellow
+recolor_robot bob green
+recolor_robot bob red
+recolor_robot bob yellow
+move_robot alice 0 0
+move_robot bob 4 4
+recolor_robot alice green
+recolor_robot alice blue
+recolor_robot alice red
+recolor_robot alice yellow
+recolor_robot bob green
+recolor_robot bob red
+recolor_robot bob yellow
+move_robot alice 0 0
+move_robot bob 4 4
+recolor_robot alice green
+recolor_robot alice blue
+recolor_robot alice red
+recolor_robot alice yellow
+recolor_robot bob green
+recolor_robot bob red
+recolor_robot bob yellow
+move_robot alice 0 0
+move_robot bob 4 4
