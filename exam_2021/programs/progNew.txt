@@ -1,0 +1,10 @@
+make_grid 4 4
+make_robot bob 1 1 red
+make_robot alice 2 2 blue
+make_robot john 3 3 green
+move_robot john 3 1
+move_robot john 3 2
+move_robot john 3 3
+delete_robot john
+delete_robot alice
+delete_robot bob

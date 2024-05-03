@@ -18,8 +18,7 @@ Color Interpreter::get_color(string color_name)
   // and // END: S1 comments. You should remove any code that is
   // already there and replace it with your own.
 
-  (void)color_name;
-  return Color::blue;
+  return color_map[color_name];
 
   // END: S1
 }
@@ -55,23 +54,42 @@ void Interpreter::execute_instruction(istringstream instruction)
     grid.make_grid(rows, cols);
 
   } else if (instr == "make_robot") {
-    throw string("Instruction not implemented " + instr);
+    string robot_name;
+    string robot_color;
+    int x;
+    int y;
+
+    instruction >> robot_name >> x >> y >> robot_color;
+    grid.make_robot(robot_name, {x, y}, get_color(robot_color));
   } else if (instr == "clear_robots") {
-    throw string("Instruction not implemented " + instr);
+    grid.clear_robots();
+
   } else if (instr == "move_robot") {
-    throw string("Instruction not implemented " + instr);
+    string robot_name;
+    int x, y;
+
+    instruction >> robot_name >> x >> y;
+    grid.move_robot(robot_name, {x, y});
+
   } else if (instr == "recolor_robot") {
-    throw string("Instruction not implemented " + instr);
+    string robot_name, robot_new_color;
+    instruction >> robot_name >> robot_new_color;
+    grid.recolor_robot(robot_name, get_color(robot_new_color));
+
   } else if (instr == "rename_robot") {
-    throw string("Instruction not implemented " + instr);
+    string robot_name, robot_new_name;
+    instruction >> robot_name >> robot_new_name;
+    grid.rename_robot(robot_name, robot_new_name);
+
   } else if (instr == "delete_robot") {
-    throw string("Instruction not implemented " + instr);
+    string robot_name;
+    instruction >> robot_name;
+    grid.delete_robot(robot_name);
+
   } else {
     // Don't change this
     throw string("Invalid command " + instr);
   }
-
-  (void)grid;
 
   // END: S2
 }

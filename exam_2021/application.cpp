@@ -20,8 +20,14 @@ string Application::load_program(string file_name)
   // and // END: A1 comments. You should remove any code that is
   // already there and replace it with your own.
 
-  (void)file_name;
-  return "";
+    ifstream file(file_name);
+    if (file.is_open()) {
+        stringstream buffer;
+        buffer << file.rdbuf();
+        return buffer.str();
+    } else {
+        throw runtime_error("Failed to open file: " + file_name);
+    }
 
   // END: A1
 }
@@ -42,8 +48,13 @@ void Application::save_program(string file_name, string contents)
   // and // END: A2 comments. You should remove any code that is
   // already there and replace it with your own.
 
-  (void)file_name;
-  (void)contents;
+    ofstream file(file_name);
+    if (file.is_open()) {
+        file << contents;
+        file.close();
+    } else {
+        throw runtime_error("Failed to open file: " + file_name);
+    }
 
   // END: A2
 }
@@ -61,8 +72,12 @@ bool Application::is_int(const string& s)
   // and // END: A3 comments. You should remove any code that is
   // already there and replace it with your own.
 
-  (void)s;
-  return false;
+    for (char c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
 
   // END: A3
 
