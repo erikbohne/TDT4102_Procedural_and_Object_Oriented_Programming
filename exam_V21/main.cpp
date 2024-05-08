@@ -1,25 +1,19 @@
-#include "Graph.h"
-#include "Window.h"
+#include "Gameoflife.h"
 #include "std_lib_facilities.h"
 
-#include "Gameoflife.h"
+using namespace TDT4102;
 
-int main()
-{
-	using namespace Graph_lib;
+int main() {
+    // Configure the number of cells in the Game of life universe
+    // and the graphical window's title.
+    constexpr int x_cells = 50;
+    constexpr int y_cells = 50;
+    const string window_title = "Conway's Game of Life";
 
-	// Enable runtime multithreading support for FLTK
-	Fl::lock();
+    // Create an instance of the Gameoflife window.
+    Gameoflife gol{x_cells, y_cells, window_title};
+    gol.run();
+    gol.wait_for_close();
 
-	// Configure the number of cells in the Game of life universe
-	// and the graphical window's title.
-	constexpr int x_cells = 50;
-	constexpr int y_cells = 50;
-	const string window_title = "Conway's Game of Life";
-
-	// Create an instance of the Gameoflife window.
-	Gameoflife gol{x_cells, y_cells, window_title};
-
-	// Run Window::gui_main() to execute the Graph_lib/FLTK loop
-	return Graph_lib::gui_main();
+    return 0;
 }
