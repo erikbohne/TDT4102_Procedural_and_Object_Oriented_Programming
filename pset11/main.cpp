@@ -92,8 +92,8 @@ void timeTask2 () {
 
     // Task e
     std::vector<int> vec;
-    // vec.reserve(1000000);
-    vec.resize(1000000);
+    vec.reserve(1000000);
+    // vec.resize(1000000);
     for (int i = 0; i < 1000000; ++i) {
         vec.push_back(i);
     }
@@ -142,7 +142,7 @@ void testMyArray() {
     std::cout << std::endl;
 
     try {
-        std::cout << "arr.at(6): " << arr.at(6) << std::endl;
+        std::cout << "arr.at(4): " << arr.at(4) << std::endl;
     } catch (const std::exception& e) {
         std::cout << "Error: " << e.what() << std::endl;
     }
