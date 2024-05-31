@@ -281,15 +281,17 @@ TilePool TileLoader::load(const std::filesystem::path descriptor_file_path)
 // Write your answer to assignment T12 here, between the // BEGIN: T12
 // and // END: T12 comments. You should remove any code that is
 // already there and replace it with your own.
-    imgpool.add_tile(0, Tile(0, false, "tiles/house_00.png"));
-    imgpool.add_tile(1, Tile(1, false, "tiles/house_01.png"));
-    imgpool.add_tile(2, Tile(2, false, "tiles/house_02.png"));
-    imgpool.add_tile(50, Tile(50, false, "tiles/house_50.png"));
 
-    // imgpool.tile_ids.push_back(0);
-    // imgpool.tile_ids.push_back(1);
-    // imgpool.tile_ids.push_back(2);
-    // imgpool.tile_ids.push_back(50);
+    if (!std::filesystem::exists(descriptor_file_path)) {
+        std::cout << "Could not open " << descriptor_file_path << std::endl;
+    } else {
+        std::string line;
+        std::fstream file{descriptor_file_path};
+        while (std::getline(file, line)) {
+            TileDescriptor curr_tile = process_line(line);
+            imgpool.add_tile(curr_tile.id, Tile(curr_tile.id, curr_tile.walkable, "tiles/" + curr_tile.filename));
+        }
+    }
 
     return imgpool;
 // END: T12
@@ -318,7 +320,33 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
 // Write your answer to assignment T13 here, between the // BEGIN: T13
 // and // END: T13 comments. You should remove any code that is
 // already there and replace it with your own.
-    return false;
+    std::fstream file{path};
+    if (!file.is_open()) {
+        std::cout << "could not open" << std::endl;
+    } else {
+        file << width << "  " << height << "\n";
+        int i = 0;
+        for (const auto& tile : level.tiles) {
+            if (i % width == 0) {
+                file << "\n";
+            }
+            file << tile << "  ";
+            i++;
+        }
+        file << "\nEND\n";
+        i = 0;
+        for (const auto& wa : level.walkable) {
+            if (i % width == 0 && i != 0) {
+                file << "\n";
+            }
+            file << static_cast<int>(wa) << "  ";
+            i++;
+        }
+        file << "\nEND\n";
+
+    }
+
+    return true;
 // END: T13
 }
 
