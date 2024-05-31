@@ -25,8 +25,11 @@ int Forecast::get_day_placement(int day)
   // Write your answer to assignment F1 here, between the // BEGIN: F1
   // and // END: F1 comments. You should remove any code that is
   // already there and replace it with your own.
+  if (day < 0 || day > 6) {
+    throw std::runtime_error("Day is out of range: " + to_string(day));
+  }
 
-  return 0;
+  return day * 150;
   // END: F1
 }
 
@@ -36,10 +39,8 @@ int Forecast::get_day_placement(int day)
 string Forecast::capitalize(string word)
 {
   // BEGIN: F2
-  //
-  // Write your answer to assignment F2 here, between the // BEGIN: F2
-  // and // END: F2 comments. You should remove any code that is
-  // already there and replace it with your own.
+
+  word[0] = toupper(word[0]);
 
   return word;
 
@@ -62,10 +63,13 @@ string Forecast::capitalize(string word)
 void Forecast::precip_statistics()
 {
   // BEGIN: F3
-  //
-  // Write your answer to assignment F3 here, between the // BEGIN: F3
-  // and // END: F3 comments. You should remove any code that is
-  // already there and replace it with your own.
+  double total_precip = 0;
+
+  for (const auto& day : days) {
+    total_precip += day.get()->precip_amount;
+  }
+
+  this->total_precip = total_precip;
 
   // END: F3
 }
@@ -86,10 +90,18 @@ void Forecast::precip_statistics()
 void Forecast::temp_statistics()
 {
   // BEGIN: F4
-  //
-  // Write your answer to assignment F4 here, between the // BEGIN: F4
-  // and // END: F4 comments. You should remove any code that is
-  // already there and replace it with your own.
+  double total_temp = 0;
+  for (const auto& day : days) {
+    if (day.get()->temp > max_temp) {
+      max_temp = day.get()->temp;
+    }
+    if (day.get()->temp < min_temp) {
+      min_temp = day.get()->temp;
+    }
+    total_temp += day.get()->temp;
+  }
+
+  avg_temp = total_temp / days.size();
 
   // END: F4
 }
@@ -107,10 +119,18 @@ void Forecast::temp_statistics()
 void Forecast::wind_statistics()
 {
   // BEGIN: F5
-  //
-  // Write your answer to assignment F5 here, between the // BEGIN: F5
-  // and // END: F5 comments. You should remove any code that is
-  // already there and replace it with your own.
+  int max_wind = 0;
+  int index = 0;
+  int day_idx = 0;
+  for (const auto& day : days) {
+    if (day.get()->wind_speed > max_wind) {
+      max_wind = day.get()->wind_speed;
+      day_idx = index;
+    }
+    index++;
+  }
+
+  windiest_day = day_idx;
 
   // END: F5
 }

@@ -124,8 +124,8 @@ string format_value(double value, int decimals, Unit unit)
 {
   // BEGIN: U4
 
-  return to_string(value) + " " + to_string(decimals) + " " + get_unit(unit);
-  
+  return to_string(value) + " " + get_unit(unit);
+
   // END: U4
 }
 

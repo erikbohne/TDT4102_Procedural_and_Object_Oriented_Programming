@@ -16,12 +16,8 @@
 TDT4102::Color ImageRenderer::get_color_value(string color)
 {
   // BEGIN: R1
-  //
-  // Write your answer to assignment R1 here, between the // BEGIN: R1
-  // and // END: R1 comments. You should remove any code that is
-  // already there and replace it with your own.
 
-  return color_map["black"];
+  return color_map[color];
 
   // END: R1
 }
@@ -35,10 +31,8 @@ TDT4102::Color ImageRenderer::get_color_value(string color)
 void ImageRenderer::add_color(char ref, string color_name)
 {
   // BEGIN: R2
-  //
-  // Write your answer to assignment R2 here, between the // BEGIN: R2
-  // and // END: R2 comments. You should remove any code that is
-  // already there and replace it with your own.
+
+  color_map[ref] = get_color_value(color_name);
 
   // END: R2
 }
