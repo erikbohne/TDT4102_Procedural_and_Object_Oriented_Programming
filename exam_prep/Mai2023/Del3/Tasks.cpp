@@ -324,13 +324,13 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
     if (!file.is_open()) {
         std::cout << "could not open" << std::endl;
     } else {
-        file << width << "  " << height << "\n";
+        file << width << "\t" << height << "\n";
         int i = 0;
         for (const auto& tile : level.tiles) {
             if (i % width == 0) {
                 file << "\n";
             }
-            file << tile << "  ";
+            file << tile << "\t";
             i++;
         }
         file << "\nEND\n";
@@ -339,7 +339,7 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
             if (i % width == 0 && i != 0) {
                 file << "\n";
             }
-            file << static_cast<int>(wa) << "  ";
+            file << static_cast<int>(wa) << "\t";
             i++;
         }
         file << "\nEND\n";
