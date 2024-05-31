@@ -51,11 +51,7 @@ bool Tile::has_image() const noexcept
 // Write your answer to assignment T3 here, between the // BEGIN: T3
 // and // END: T3 comments. You should remove any code that is
 // already there and replace it with your own.
-    if (image == nullptr) {
-        return false;
-    } else { 
-        return true;
-    }
+    return static_cast<bool>(image);
 // END: T3
 }
 
@@ -73,21 +69,10 @@ Region::Region(const TDT4102::Point p1, const TDT4102::Point p2)
 // Write your answer to assignment T4 here, between the // BEGIN: T4
 // and // END: T4 comments. You should remove any code that is
 // already there and replace it with your own.
-    if (p1.x > p2.x) {
-        begin.x = p1.x;
-        end.x = p2.x;
-    } else {
-        end.x = p1.x;
-        begin.x = p2.x; 
-    }
-
-    if (p1.y > p2.y) {
-        begin.y = p1.y;
-        end.y = p2.y;
-    } else {
-        end.y = p1.y;
-        begin.y = p2.y; 
-    }
+    begin.x = std::min(p1.x, p2.x);
+    begin.y = std::min(p1.y, p2.y);
+    end.x = std::max(p1.x, p2.x);
+    end.y = std::max(p1.y, p2.y);
 
 // END: T4
 }
@@ -320,32 +305,36 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
 // Write your answer to assignment T13 here, between the // BEGIN: T13
 // and // END: T13 comments. You should remove any code that is
 // already there and replace it with your own.
-    std::fstream file{path};
-    if (!file.is_open()) {
-        std::cout << "could not open" << std::endl;
-    } else {
-        file << width << "\t" << height << "\n";
-        int i = 0;
-        for (const auto& tile : level.tiles) {
-            if (i % width == 0) {
-                file << "\n";
-            }
-            file << tile << "\t";
-            i++;
-        }
-        file << "\nEND\n";
-        i = 0;
-        for (const auto& wa : level.walkable) {
-            if (i % width == 0 && i != 0) {
-                file << "\n";
-            }
-            file << static_cast<int>(wa) << "\t";
-            i++;
-        }
-        file << "\nEND\n";
+    std::ofstream fs{path};
 
+    if ( ! fs.is_open() ) { return false; }
+
+    fs << width << '\t' << height << std::endl;
+
+    // Write TILES
+    for ( int j = 0; j < height; j++ )
+    {
+        for ( int i = 0; i < width; i++ )
+        {
+            if ( i > 0 ) fs << '\t';
+            fs << tile_at(j,i);
+        }
+        fs << std::endl;
     }
+    fs << "END";
+    fs << std::endl;
 
+    // Write WALKABLE
+    for ( int j = 0; j < height; j++ )
+    {
+        for ( int i = 0; i < width; i++ )
+        {
+            if ( i > 0 ) fs << '\t';
+            fs << (walkable_at(j,i) ? '1' : '0');
+        }
+        fs << std::endl;
+    }
+    fs << "END";
     return true;
 // END: T13
 }
