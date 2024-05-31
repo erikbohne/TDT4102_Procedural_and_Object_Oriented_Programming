@@ -11,8 +11,21 @@ string format_weekday(int weekday_num)
   // and // END: U1 comments. You should remove any code that is
   // already there and replace it with your own.
 
+  if (weekday_num > 6 || weekday_num < 0) {
+    throw std::runtime_error("Weekday out of bounds, should be 0-6");
+  }
 
-  return "Someday";
+  std::map<int, std::string> num_to_day{
+    {0, "Monday"},
+    {1, "Tuesday"},
+    {2, "Wednesday"},
+    {3, "Thursday"},
+    {4, "Friday"},
+    {5, "Saturday"},
+    {6, "Sunday"}
+  };
+
+  return num_to_day[weekday_num];
 
   // END: U1
 }
@@ -35,12 +48,30 @@ string format_weekday(int weekday_num)
 string format_wind_dir(double heading)
 {
   // BEGIN: U2
-  //
-  // Write your answer to assignment U2 here, between the // BEGIN: U2
-  // and // END: U2 comments. You should remove any code that is
-  // already there and replace it with your own.
+  
+  if (heading > 360.0 || heading < 0.0) {
+    throw std::runtime_error("Headnig out of bounds, should be 0-360");
+  }
 
-  return "Some-heading";
+  if (heading >= 22.5 && heading < 67.5) {
+    return "North-East";
+  } else if (heading >= 67.5 && heading < 112.5) {
+    return "East";
+  } else if (heading >= 112.5 && heading < 157.5) {
+    return "South-East";
+  } else if (heading >= 157.5 && heading < 202.5) {
+    return "South";
+  } else if (heading >= 202.5 && heading < 247.5) {
+    return "South-West";
+  } else if (heading >= 247.5 && heading < 292.5) {
+    return "West";
+  } else if (heading >= 292.5 && heading < 337.5) {
+    return "North-West";
+  } else if (heading >= 337.5 || heading < 22.5) {
+    return "North";
+  }
+
+  throw std::runtime_error("Did not get correct wind dir");
 
   // END: U2
 }
@@ -61,14 +92,15 @@ string format_wind_dir(double heading)
 // get_unit(UNIT_MM) == "mm".
 string get_unit(Unit unit)
 {
-  // BEGIN: U4
-  //
-  // Write your answer to assignment U4 here, between the // BEGIN: U4
-  // and // END: U4 comments. You should remove any code that is
-  // already there and replace it with your own.
+  if (unit == Unit::UNIT_DC) {
+    return "°C";
+  } else if (unit == Unit::UNIT_MM) {
+    return "mm";
+  } else if (unit == Unit::UNIT_MS) {
+    return "m/s";
+  }
 
-  return "unit";
-
+  throw std::runtime_error("Unit not found");
   // END: U4
 }
 
@@ -91,14 +123,9 @@ string get_unit(Unit unit)
 string format_value(double value, int decimals, Unit unit)
 {
   // BEGIN: U4
-  //
-  // Write your answer to assignment U4 here, between the // BEGIN: U4
-  // and // END: U4 comments. You should remove any code that is
-  // already there and replace it with your own.
 
-  return to_string(value);
-
-
+  return to_string(value) + " " + to_string(decimals) + " " + get_unit(unit);
+  
   // END: U4
 }
 

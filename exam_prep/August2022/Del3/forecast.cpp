@@ -27,7 +27,6 @@ int Forecast::get_day_placement(int day)
   // already there and replace it with your own.
 
   return 0;
-
   // END: F1
 }
 
