@@ -1,0 +1,7 @@
+day,temp,wind_dir,wind_speed,symbol,percip_amount
+3,27.4,270.5,6.9,clearsky_day,0.0
+4,27.0,245.0,4.1,clearsky_day,0.0
+5,27.0,278.0,3.0,clearsky_day,0.0
+6,27.5,258.0,5.6,clearsky_day,0.0
+0,26.8,293.0,0.9,fair_day,0.0
+1,28.0,181.7,3.0,clearsky_day,0.0
